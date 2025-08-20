@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MayaCode | Compra</title>
+    <link rel="icon" href="images/logo-r.ico" type="image/logo-r.ico" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* Aplica flex para hacer sticky footer */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1 0 auto;
+            /* Ocupa el espacio disponible, empuja footer abajo */
+        }
+
+        footer.footer {
+            flex-shrink: 0;
+            /* No se encoge, permanece abajo */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header igual al principal -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <img src="images/logo.png" alt="MayaCode Logo" />
+                    <span>MayaCode</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html#inicio">Inicio</a></li>
+                    <li><a href="index.html#productos">Productos</a></li>
+                    <li><a href="index.html#nosotros">Nosotros</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container" style="padding: 120px 20px 80px;">
+        <center><img src="images/logo-t1.png" width="200"></center>
+        <h1>Resumen de tu Compra</h1>
+        <div id="detalle-compra"></div>
+        <button id="btn-confirmar" class="btn btn-primary" style="margin-top: 30px;">Confirmar Pedido</button>
+    </main>
+
+    <!-- Footer igual al principal -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>MayaCode</h3>
+                    <p>Café Premium Guatemalteco</p>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contacto</h4>
+                    <p>📱 +502 1234-5678</p>
+                    <p>📧 info@mayacode.gt</p>
+                    <p>📍 Guatemala, Guatemala</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 MayaCode. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const detalleDiv = document.getElementById('detalle-compra');
+            const btnConfirmar = document.getElementById('btn-confirmar');
+
+            // Obtener info del carrito desde localStorage
+            let carrito = JSON.parse(localStorage.getItem('detalleCompra')) || [];
+
+            if (carrito.length === 0) {
+                detalleDiv.innerHTML = '<p>No hay productos en tu compra.</p>';
+                btnConfirmar.style.display = 'none';
+                return;
+            }
+
+            // Construir tabla resumen
+            let html = '<table style="width:100%; border-collapse: collapse;">';
+            html += '<thead><tr><th style="border-bottom:1px solid #ccc; padding:8px; text-align:left;">Producto</th><th style="border-bottom:1px solid #ccc; padding:8px;">Cantidad</th><th style="border-bottom:1px solid #ccc; padding:8px; text-align:right;">Precio Unitario (Q)</th><th style="border-bottom:1px solid #ccc; padding:8px; text-align:right;">Subtotal (Q)</th></tr></thead><tbody>';
+
+            let total = 0;
+            carrito.forEach(producto => {
+                const subtotal = producto.precio * producto.cantidad;
+                total += subtotal;
+                html += `<tr>
+                        <td style="padding:8px;">${producto.nombre}</td>
+                        <td style="padding:8px; text-align:center;">${producto.cantidad}</td>
+                        <td style="padding:8px; text-align:right;">${producto.precio.toFixed(2)}</td>
+                        <td style="padding:8px; text-align:right;">${subtotal.toFixed(2)}</td>
+                      </tr>`;
+            });
+            html += `</tbody><tfoot><tr>
+                    <td colspan="3" style="padding:8px; font-weight:bold; text-align:right;">Total:</td>
+                    <td style="padding:8px; font-weight:bold; text-align:right;">Q. ${total.toFixed(2)}</td>
+                  </tr></tfoot></table>`;
+
+            detalleDiv.innerHTML = html;
+
+            btnConfirmar.addEventListener('click', () => {
+                Swal.fire({
+                    title: '¡Pedido Confirmado!',
+                    icon: 'success',
+                    text: 'Gracias por confirmar tu pedido. Nos pondremos en contacto contigo pronto.',
+                    confirmButtonColor: '#d4a574',
+                    confirmButtonText: 'Cerrar'
+                }).then(() => {
+                    localStorage.removeItem('detalleCompra');
+                    window.location.href = 'index.html';
+                });
+            });
+
+        });
+    </script>
+</body>
+
+</html>
