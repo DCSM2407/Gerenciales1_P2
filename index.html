@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MayaCode - Café Premium Guatemalteco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <a href="#inicio"><img src="images/logo.png" alt="MayaCode Logo"></a>
+                    <span>MayaCode</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>Café Premium Guatemalteco</h1>
+            <p>Descubre el sabor auténtico de Guatemala con nuestro nuevo <strong>Café Soluble</strong> y café en grano personalizado</p>
+            <div class="hero-buttons">
+                <a href="#productos" class="btn btn-primary">Ver Productos</a>
+                <a href="#contacto" class="btn btn-secondary">Cotizar Ahora</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productos -->
+    <section id="productos" class="productos">
+        <div class="container">
+            <h2>Nuestros Productos</h2>
+            <div class="productos-grid">
+                <!-- Café Soluble -->
+                <div class="producto-card">
+                    <img src="images/cafe-soluble.png" alt="Café Soluble MayaCode">
+                    <h3>Café Soluble Premium</h3>
+                    <p>Nuestro nuevo producto: café 100% guatemalteco, procesado con la mejor tecnología para conservar todo el sabor y aroma.</p>
+                    <div class="precio">Q.45.00 - Q.85.00</div>
+                    <button class="btn btn-primary" onclick="abrirFormulario('soluble')">Pedir Cotización</button>
+                </div>
+
+                <!-- Café en Grano -->
+                <div class="producto-card">
+                    <img src="images/cafe-grano.png" alt="Café en Grano MayaCode">
+                    <h3>Café en Grano al Gusto</h3>
+                    <p>Café personalizado según tus preferencias: tostado, origen, y preparación. 20 años de experiencia nos respaldan.</p>
+                    <div class="precio">Q.60.00 - Q.120.00</div>
+                    <button class="btn btn-primary" onclick="abrirFormulario('grano')">Pedir Cotización</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Nosotros -->
+    <section id="nosotros" class="nosotros">
+        <div class="container">
+            <div class="nosotros-content">
+                <div class="nosotros-texto">
+                    <h2>20 Años de Tradición Cafetalera</h2>
+                    <p>MayaCode es una empresa familiar guatemalteca con dos décadas de experiencia en la producción de café de alta calidad. Nos especializamos en café premium que refleja la riqueza de nuestras tierras volcánicas.</p>
+                    <ul class="ventajas">
+                        <li>✓ Café 100% guatemalteco</li>
+                        <li>✓ Proceso artesanal y tecnológico</li>
+                        <li>✓ Personalización según el cliente</li>
+                        <li>✓ Garantía de calidad y frescura</li>
+                    </ul>
+                </div>
+                <div class="nosotros-imagen">
+                    <img src="images/plantacion.jpg" alt="Plantación de café">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formulario de Contacto -->
+    <section id="contacto" class="contacto">
+        <div class="container">
+            <h2>Solicita tu Cotización</h2>
+            <form class="formulario-cotizacion" id="formularioCotizacion">
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo *</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono *</label>
+                        <input type="tel" id="telefono" name="telefono" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="producto">Producto de Interés *</label>
+                    <select id="producto" name="producto" required>
+                        <option value="">Selecciona un producto</option>
+                        <option value="soluble">Café Soluble Premium</option>
+                        <option value="grano">Café en Grano al Gusto</option>
+                        <option value="ambos">Ambos productos</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="cantidad">Cantidad Estimada</label>
+                    <select id="cantidad" name="cantidad">
+                        <option value="">Selecciona cantidad</option>
+                        <option value="1-10">1-10 libras</option>
+                        <option value="11-50">11-50 libras</option>
+                        <option value="51-100">51-100 libras</option>
+                        <option value="100+">Más de 100 libras</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mensaje">Mensaje Adicional</label>
+                    <textarea id="mensaje" name="mensaje" rows="4" placeholder="Cuéntanos sobre tus preferencias específicas..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-large">Enviar Cotización</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>MayaCode</h3>
+                    <p>Café Premium Guatemalteco</p>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contacto</h4>
+                    <p>📱 +502 1234-5678</p>
+                    <p>📧 info@mayacode.gt</p>
+                    <p>📍 Guatemala, Guatemala</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 MayaCode. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
