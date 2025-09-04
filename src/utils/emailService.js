@@ -1,6 +1,6 @@
 import emailjs from 'emailjs-com';
 
-// Configuración de EmailJS
+// 🔥 SOLUCIÓN RÁPIDA: Valores hardcodeados
 const SERVICE_ID = 'service_2hdwov4';
 const TEMPLATE_ID = 'template_4vb3szl'; 
 const PUBLIC_KEY = 'QdCQtH8Bj6Ix-eVd2';
@@ -10,16 +10,16 @@ emailjs.init(PUBLIC_KEY);
 
 export const sendOrderEmail = async (orderData) => {
   try {
-    // Validación de datos esenciales
-    if (!orderData || !orderData.customerEmail) {
+    if (!orderData?.customerEmail) {
       throw new Error('Email del cliente es requerido');
     }
 
-    console.log('📧 Iniciando envío para:', orderData.customerEmail);
+    console.log('📧 [PRODUCCIÓN] Iniciando envío para:', orderData.customerEmail);
+    console.log('🔧 [PRODUCCIÓN] SERVICE_ID:', SERVICE_ID);
+    console.log('🔧 [PRODUCCIÓN] TEMPLATE_ID:', TEMPLATE_ID);
 
-    // ⚠️ CLAVE: Usar exactamente estos nombres de parámetros
     const templateParams = {
-      to_email: orderData.customerEmail,           // ← ESTE ES EL CAMPO CRÍTICO
+      to_email: orderData.customerEmail,
       customer_name: orderData.customerName,
       order_number: orderData.orderNumber,
       order_date: new Date().toLocaleDateString('es-ES', {
@@ -31,51 +31,63 @@ export const sendOrderEmail = async (orderData) => {
         minute: '2-digit'
       }),
       order_total: orderData.total,
-      order_items: orderData.items.map(item => 
+      order_items: orderData.items?.map(item => 
         `☕ ${item.name} x${item.quantity} - Q.${(item.price * item.quantity).toFixed(2)}`
-      ).join('\n'),
+      ).join('\n') || 'Sin productos',
       customer_address: orderData.address || 'No especificada',
       customer_phone: orderData.phone || 'No especificado'
     };
 
-    console.log('📋 Template params:', templateParams);
+    console.log('📋 [PRODUCCIÓN] Template params:', templateParams);
 
-    // Enviar email
-    const response = await emailjs.send(
-      SERVICE_ID,
-      TEMPLATE_ID,
-      templateParams
-    );
+    // Envío con timeout
+    const response = await Promise.race([
+      emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout: EmailJS tardó más de 15 segundos')), 15000)
+      )
+    ]);
 
-    console.log('✅ Email enviado exitosamente:', response);
+    console.log('✅ [PRODUCCIÓN] Email enviado exitosamente:', response);
     return { success: true, response };
 
   } catch (error) {
-    console.error('❌ Error enviando email:', error);
+    console.error('❌ [PRODUCCIÓN] Error completo:', error);
     
-    let errorMessage = 'Error al enviar el email';
-    if (error.text === 'The recipients address is empty') {
-      errorMessage = 'Error de configuración: Verifica que el campo "To Email" en tu template sea {{to_email}}';
+    let errorMessage = 'Error al enviar el email en producción';
+    if (error.status === 404) {
+      errorMessage = 'Error 404: Problema con SERVICE_ID o TEMPLATE_ID en producción';
+    } else if (error.status === 422) {
+      errorMessage = 'Error 422: Problema con configuración del template';
+    } else if (error.message?.includes('Timeout')) {
+      errorMessage = 'Timeout: El servicio de email tardó demasiado';
     } else if (error.text) {
       errorMessage = error.text;
     }
 
-    return { success: false, error: errorMessage };
+    return { 
+      success: false, 
+      error: errorMessage,
+      details: error
+    };
   }
 };
 
-// Función de prueba
-export const testEmailService = async () => {
+// Función de prueba para producción
+export const testProductionEmail = async () => {
+  console.log('🧪 [PRODUCCIÓN] Iniciando test...');
+  
   const testData = {
     customerEmail: 'dilansuy24@gmail.com',
-    customerName: 'Test Usuario',
-    orderNumber: 'TEST-' + Date.now(),
-    total: '45.00',
-    items: [{ name: 'Café Test', quantity: 1, price: 45.00 }],
-    address: 'Dirección de prueba',
+    customerName: 'Test Producción',
+    orderNumber: 'PROD-TEST-' + Date.now(),
+    total: '1.00',
+    items: [{ name: 'Test Café Producción', quantity: 1, price: 1.00 }],
+    address: 'Test Address Production',
     phone: '12345678'
   };
-
-  console.log('🧪 Ejecutando test...');
-  return await sendOrderEmail(testData);
+  
+  const result = await sendOrderEmail(testData);
+  console.log('🧪 [PRODUCCIÓN] Resultado:', result);
+  return result;
 };
